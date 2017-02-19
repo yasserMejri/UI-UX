@@ -68,6 +68,14 @@ body canvas {
 	transition: opacity 3s;
 }
 
+#click_anywhere {
+  position: fixed;
+  top: 83%;
+  left: 45%;
+  opacity: 0;
+  z-index: 1;
+  transition: opacity 1s;
+}
 
 #main_screen {
 	position: absolute;

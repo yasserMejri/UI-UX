@@ -37,13 +37,13 @@ function triangulate(dense) {
     vertices.push([centerX, centerY]);
 
     for (var i = 0; i < dense; i ++) {
-        x = Math.random() * imageWidth * 1.5 - imageWidth * 0.2;
-        y = Math.random() * imageHeight * 1.5 - imageHeight * 0.2;
+        x = (Math.random()) * imageWidth * 1.5 - imageWidth * 0.1;
+        y = (Math.random()) * imageHeight * 1.5 - imageHeight * 0.1;
         vertices.push([x, y]); 
     }
 
     vertices.forEach(function(v) {
-        v[0] = clamp(v[0], 0, imageWidth);
+        v[0] = clamp(v[0], 0, imageWidth * 1.5);
         v[1] = clamp(v[1], 0, imageHeight);
     });
 

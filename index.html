@@ -18,6 +18,7 @@
 	</div>
 	<div id="loading_screen">
 		<img class = "logo" id="big_logo" src = "./img/Loading Page - Wasted Talent.gif" />
+		<label id = "click_anywhere" > Click anywhere</label>
 		<div id="loading_back_wrap">
 			<img id = "loading_canvas" width="100%" src = "./img/loading.jpg" > </img>
 		</div>
@@ -49,7 +50,6 @@
 		<img id="main_text" src="./img/Main Page - Saddest Thing in Life.gif" />
 		<img id="main_text_shadow" src="./img/main-text-shadow.png" />
 		<img id="main_image" src="./img/main.jpg" width="100%"/>
-		<!-- <object data="./img/main-text.svg" type="image/svg+xml"></object> -->
 	</div>
 
 <script id = "loading-script">
@@ -67,9 +67,27 @@ $(document).ready(function() {
 	var load, shake;
 	var q = 1, pulse, dcolor;
 
+
+	// Main bariables
+
+	var l_indices = [];
+	var l_frags = [];
+	var main_screen = document.getElementById("main_screen"); 
+	var fragment, frag_size;
+	var affect_r = 200, dx, dy, tx, ty, gold_x, gold_y;
+	var prev_e = 0, min_r = 1, pdx, pdy, pstp, pdr, dr, pr, new_e = 0;
+	var que = [], inertia = 0;
+
+	var coss = [];
+	// Main bariables
+
+
+
 	setTimeout(function() {
 		load = setInterval(loading, 200);
+		build_pieces(); 
 	}, 400); 
+
 
 	function loading() {
 		load_percent += Math.random()* 10; 
@@ -94,6 +112,10 @@ $(document).ready(function() {
 
 	function load_complete() {
 		document.getElementById("big_logo").className = "up";
+		document.getElementById("big_logo").src = document.getElementById("big_logo").src;
+		setTimeout(function() {
+			document.getElementById("click_anywhere").style.opacity = 1;
+		}, 7000);
 	}
 
 	$("#big_logo").click(function() {
@@ -120,6 +142,10 @@ $(document).ready(function() {
 			document.getElementById("main_text").src = document.getElementById("main_text").src;
 			document.getElementById("main_logo").className = "up"; 
 			document.getElementById("main_text_shadow").className = "up"; 
+			$("#main_screen canvas").css('opacity', '1');
+			setTimeout(function() {
+				setInterval(process, 50);
+			}, 3000);
 		}, 5000);
 	}
 
@@ -128,21 +154,16 @@ $(document).ready(function() {
 
 	// Mainscreen functions
 
-	var l_indices = [];
-	var l_frags = [];
-	var main_screen = document.getElementById("main_screen"); 
-	var fragment, frag_size;
-	var affect_r = 200, dx, dy, tx, ty, gold_x, gold_y;
-	var prev_e = 0, min_r = 1, pdx, pdy, pstp, pdr, dr, pr, new_e = 0;
-	var que = [], inertia = 0;
-
-	var coss = [];
-
 	document.getElementById("main_image").style.opacity = 0;
 
-	function init_mainscreen() {
-		document.getElementById("main_image").style.display = "block";
-		document.getElementById("main_image").style.opacity = 1;
+	function build_pieces() {
+
+		image = document.getElementById("main_image");
+		imageWidth = image.width;
+		imageHeight = image.height;
+		pic_real_width = image.naturalWidth;
+		pic_real_height = image.naturalHeight;
+
 		for(var i = 0; i <= affect_r; i += 10) {
 			coss[i] = [];
 			for(var j = 0; j < i; j ++) {
@@ -150,37 +171,38 @@ $(document).ready(function() {
 			}
 			coss[i].push(0);
 		}
-		setTimeout(function() {
-			image = document.getElementById("main_image"); 
-			for(var l = 0; l < 6; l ++) {
-			    vertices = [];
-				l_indices = triangulate(200);
-				l_frags[l] = [];
-				for(var i = 0; i < l_indices.length; i +=3) {
-			        p0 = vertices[l_indices[i + 0]];
-			        p1 = vertices[l_indices[i + 1]];
-			        p2 = vertices[l_indices[i + 2]];
-			        fragment = new Fragment(p0, p1, p2);
-			        frag_size = fragment.box.w + fragment.box.h;
-			        if(frag_size < 100)
-			        	continue;
-			        else if(frag_size < 200)
-				        fragment.canvas.style.zIndex = 5;
-				    else if(frag_size < 300)
-				    	fragment.canvas.style.zIndex = 4;
-				    else 
-				    	continue;
-			        fragment.canvas.style.transition = "transform 0.3s";
-			        l_frags[l].push(fragment); 
-			        main_screen.appendChild(fragment.canvas);
-				}
+		image = document.getElementById("main_image"); 
+		for(var l = 0; l < 5; l ++) {
+		    vertices = [];
+			l_indices = triangulate(200);
+			l_frags[l] = [];
+			for(var i = 0; i < l_indices.length; i +=3) {
+		        p0 = vertices[l_indices[i + 0]];
+		        p1 = vertices[l_indices[i + 1]];
+		        p2 = vertices[l_indices[i + 2]];
+		        fragment = new Fragment(p0, p1, p2);
+		        frag_size = fragment.box.w + fragment.box.h;
+		        if(frag_size < 100)
+		        	continue;
+		        else if(frag_size < 200)
+			        fragment.canvas.style.zIndex = 5;
+			    else if(frag_size < 300)
+			    	fragment.canvas.style.zIndex = 4;
+			    else 
+			    	continue;
+		        fragment.canvas.style.transition = "transform 0.3s";
+		        fragment.canvas.style.opacity = 0;
+		        l_frags[l].push(fragment); 
+		        main_screen.appendChild(fragment.canvas);
 			}
-			console.log(l_indices);
-			console.log(coss);
-			setTimeout(function() {
-				setInterval(process, 50);
-			}, 1000); 
-		}, 4000); 
+		}
+		console.log(l_frags);
+		console.log(coss);
+	}
+
+	function init_mainscreen() {
+		document.getElementById("main_image").style.display = "block";
+		document.getElementById("main_image").style.opacity = 1;
 	}
 
 	document.getElementById("main_screen").onmousemove = function(event) {
@@ -233,10 +255,6 @@ $(document).ready(function() {
 				fragment.canvas.style.transform = "translate("+tx+"px,"+ty+"px) rotate(" + pdr + "deg)"; 
 			}
 		}
-		// clearInterval(pstp);
-		// pstp = setTimeout(function() {
-		// 	$("#main_screen").mousemove();
-		// }, 200);
 	} 
 
 }); 
