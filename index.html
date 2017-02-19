@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title> The saddest thing in life </title>
+	<meta charset="UTF-8" />
+	<script language = "javascript" src = "./js/jquery.min.js"> </script>
+	<script language = "javascript" src = "./js/delaunay.js"> </script>
+	<script language = "javascript" src = "./js/TweenMax.min.js"> </script>
+	<script language = "javascript" src = "./js/loading_transition.js"> </script>
+	<link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+	<div id="loader">
+		<label id="loading_text" class="screen_center" > 0%</label>
+		<label id="loading_percent" class="screen_center" > </label>
+	</div>
+	<div id="loading_screen">
+		<img class = "logo" id="big_logo" src = "./img/Loading Page - Wasted Talent.gif" />
+		<div id="loading_back_wrap">
+			<img id = "loading_canvas" width="100%" src = "./img/loading.jpg" > </img>
+		</div>
+
+		<div class="fone-slider" id="background" >
+		  <div class="fone-slide">
+		    <div class="fone-slide__img fone-slide__img--first" ></div>
+		    <div class="fone-slide__glitch"></div>
+		    <div class="fone-slide__glitch"></div>
+		    <div class="fone-slide__glitch"></div>
+		  </div>
+		  <div class="fone-slide">
+		    <div class="fone-slide__img fone-slide__img--second"></div>
+		    <div class="fone-slide__glitch"></div>
+		    <div class="fone-slide__glitch"></div>
+		    <div class="fone-slide__glitch"></div>
+		  </div>
+		  <div class="fone-slide">
+		    <div class="fone-slide__img fone-slide__img--third"></div>
+		    <div class="fone-slide__glitch"></div>
+		    <div class="fone-slide__glitch"></div>
+		    <div class="fone-slide__glitch"></div>
+		  </div>
+		</div>
+	</div>
+
+	<div id="main_screen">
+		<img id="main_logo" src="./img/main-logo.png" />
+		<img id="main_text" src="./img/Main Page - Saddest Thing in Life.gif" />
+		<img id="main_text_shadow" src="./img/main-text-shadow.png" />
+		<img id="main_image" src="./img/main.jpg" width="100%"/>
+		<!-- <object data="./img/main-text.svg" type="image/svg+xml"></object> -->
+	</div>
+
+<script id = "loading-script">
+$(document).ready(function() {
+
+	console.log($("#background")); 
+
+	var load_percent = 0;
+	var loader = document.getElementById("loader");
+	var loading_screen = document.getElementById("loading_screen");
+	var loading_canvas = document.getElementById("loading_canvas");
+	var loading_text = document.getElementById("loading_text"); 
+	var loading_percent = document.getElementById("loading_percent"); 
+	var max_height = 200;
+	var load, shake;
+	var q = 1, pulse, dcolor;
+
+	setTimeout(function() {
+		load = setInterval(loading, 200);
+	}, 400); 
+
+	function loading() {
+		load_percent += Math.random()* 10; 
+		if(load_percent > 100) {
+			clearInterval(load);
+			loading_text.innerHTML = "100%";
+			loading_percent.style.opacity = 0;
+			loading_text.style.opacity = 0;
+			loading_text.style.color="#fff";
+			loader.style.backgroundColor="#333";
+			loader.style.opacity = 0;
+			setTimeout(function() {
+				$("#loader").remove();
+				load_complete();
+			}, 4000);
+			return;
+		}
+		dcolor = parseInt(load_percent) / 100 * 255;
+		loading_text.innerHTML = parseInt(load_percent) + "%";
+		console.log(load_percent);
+	}
+
+	function load_complete() {
+		document.getElementById("big_logo").className = "up";
+	}
+
+	$("#big_logo").click(function() {
+		loading_canvas.className = "active";
+		setTimeout(function() {
+			to_mainscreen(); 
+			$("#background").css('opacity', '0');
+		}, 1000); 
+	}); 
+
+	function to_mainscreen() {
+		init_mainscreen(); 
+		container = document.getElementById("loading_back_wrap"); 
+		image = document.getElementById("loading_canvas");
+		imageWidth = image.width;
+		imageHeight = image.height;
+		pic_real_width = image.naturalWidth;
+		pic_real_height = image.naturalHeight;
+		effect_go(); 
+		document.getElementById("big_logo").style.opacity = 0;
+		setTimeout(function() {
+			$("#loading_screen").remove();
+			document.getElementById("main_text").className = "up"; 
+			document.getElementById("main_text").src = document.getElementById("main_text").src;
+			document.getElementById("main_logo").className = "up"; 
+			document.getElementById("main_text_shadow").className = "up"; 
+		}, 5000);
+	}
+
+
+
+
+	// Mainscreen functions
+
+	var l_indices = [];
+	var l_frags = [];
+	var main_screen = document.getElementById("main_screen"); 
+	var fragment, frag_size;
+	var affect_r = 200, dx, dy, tx, ty, gold_x, gold_y;
+	var prev_e = 0, min_r = 1, pdx, pdy, pstp, pdr, dr, pr, new_e = 0;
+	var que = [], inertia = 0;
+
+	var coss = [];
+
+	document.getElementById("main_image").style.opacity = 0;
+
+	function init_mainscreen() {
+		document.getElementById("main_image").style.display = "block";
+		document.getElementById("main_image").style.opacity = 1;
+		for(var i = 0; i <= affect_r; i += 10) {
+			coss[i] = [];
+			for(var j = 0; j < i; j ++) {
+				coss[i].push(Math.cos(j / i * Math.PI * 0.75 - Math.PI * 0.25));
+			}
+			coss[i].push(0);
+		}
+		setTimeout(function() {
+			image = document.getElementById("main_image"); 
+			for(var l = 0; l < 6; l ++) {
+			    vertices = [];
+				l_indices = triangulate(200);
+				l_frags[l] = [];
+				for(var i = 0; i < l_indices.length; i +=3) {
+			        p0 = vertices[l_indices[i + 0]];
+			        p1 = vertices[l_indices[i + 1]];
+			        p2 = vertices[l_indices[i + 2]];
+			        fragment = new Fragment(p0, p1, p2);
+			        frag_size = fragment.box.w + fragment.box.h;
+			        if(frag_size < 100)
+			        	continue;
+			        else if(frag_size < 200)
+				        fragment.canvas.style.zIndex = 5;
+				    else if(frag_size < 300)
+				    	fragment.canvas.style.zIndex = 4;
+				    else 
+				    	continue;
+			        fragment.canvas.style.transition = "transform 0.3s";
+			        l_frags[l].push(fragment); 
+			        main_screen.appendChild(fragment.canvas);
+				}
+			}
+			console.log(l_indices);
+			console.log(coss);
+			setTimeout(function() {
+				setInterval(process, 50);
+			}, 1000); 
+		}, 4000); 
+	}
+
+	document.getElementById("main_screen").onmousemove = function(event) {
+		update_pos(event);
+	}; 
+
+	function update_pos(e) {
+		new_e = e;
+		clearInterval(pstp);
+		pstp = setTimeout(function() {
+			new_e = prev_e;
+		}, 10);
+	}
+
+	function process() {
+		if(new_e == 0) return ;
+		// console.log(e);
+		if(prev_e == 0) prev_e = new_e;
+
+		pdx = Math.abs(new_e.clientX - prev_e.clientX); 
+		pdy = Math.abs(new_e.clientY - prev_e.clientY); 
+		pdr = pdx + pdy;
+		if(pdr == 0 || isNaN(pdr)) {
+			inertia -= 10;
+			if(inertia < 0) inertia = 0;
+		} else {
+			inertia += 10;
+			if(inertia > affect_r) inertia = affect_r;
+		}
+
+		prev_e = new_e;
+		// inertia = 50;
+		console.log(inertia);
+
+		for(var l = 0; l < l_frags.length; l ++) {
+			for(var i = 0; i < l_frags[l].length; i ++) {
+				fragment = l_frags[l][i]; 
+				dx = fragment.centroid[0] - new_e.clientX; 
+				dy = fragment.centroid[1] - new_e.clientY; 
+				dr = Math.min(Math.sqrt(dx * dx + dy * dy), inertia);
+				pdr = parseInt(Math.sin(dr / inertia) * 35);
+				if(dr == inertia) {
+					dx = dy = inertia;
+					pdr = 0;
+				}
+				gold_x = ((6 - fragment.canvas.style.zIndex) / 6) * coss[inertia][parseInt(Math.abs(dx))];
+				gold_y = ((6 - fragment.canvas.style.zIndex) / 6) * coss[inertia][parseInt(Math.abs(dy))];
+				tx = Math.sign(dx) * (gold_x * inertia);
+				ty = Math.sign(dy) * (gold_y * inertia);
+				fragment.canvas.style.transform = "translate("+tx+"px,"+ty+"px) rotate(" + pdr + "deg)"; 
+			}
+		}
+		// clearInterval(pstp);
+		// pstp = setTimeout(function() {
+		// 	$("#main_screen").mousemove();
+		// }, 200);
+	} 
+
+}); 
+
+</script>
+	
+</body>
+
+</html>

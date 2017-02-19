@@ -1,0 +1,450 @@
+body {
+  overflow: hidden;
+  margin: 0;
+}
+
+body canvas {
+	position: absolute;
+}
+
+#loading_screen * {
+	transition: opacity 1s;
+}
+
+#loading_back_wrap {
+	z-index: 15;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+#loading_canvas {
+	width: 100%;
+	z-index: 15;
+	position: absolute;
+  filter: grayscale(1);
+	background-image: url(../img/loading.jpg);
+	background-size: cover;
+	opacity: 0;
+}
+
+#loading_canvas.active {
+	opacity: 1;
+}
+
+#big_logo {
+	position: fixed;
+	width: 100%;
+	top: -5%;
+  opacity: 0;
+  transition: opacity 1s;
+}
+
+#big_logo.up {
+	z-index: 200000;
+	opacity: 1;
+}
+
+#loader {
+	position: fixed;
+	background: #fff;
+	width: 100%;
+	height: 100%;
+	transition: opacity 3s ease 2s, background-color 1s;
+	z-index: 200050;
+}
+
+.screen_center {
+	position: fixed;
+	top: 45%;
+	left: 48%;
+	transition: opacity 1s ease 2s, color 1s;
+	opacity: 1;
+	color: #222;
+	z-index: 200055;
+}
+
+#loading_percent {
+	transition: opacity 3s;
+}
+
+
+#main_screen {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	img {
+		position: fixed;
+    transition: opacity 1s;
+	}
+  .up {
+    opacity: 1 !important;
+  }
+	#main_text, #main_logo {
+		  position: fixed;
+      z-index: 20;
+	    opacity: 0;
+	}
+	#main_image {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 0;
+	}
+	#main_text {
+	   width: 100%;
+	   top: -7%;
+	}
+  #main_text_shadow {
+    z-index: 19;
+    opacity: 0;
+    width: 38%;
+    top: 41%;
+    left: 31%;
+  }
+	#main_logo {
+	}
+}
+
+@keyframes tri-back {
+	100% {
+		transform: translate(0,0) rotate(0deg);
+	}
+}
+
+@keyframes noise-anim{
+ 50% {
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(6) - 3%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+ @for $i from 51 through 60{
+   #{percentage($i/100)}{
+     left: random(6) - 3%;
+     top: random(3) - 2%;
+   }
+ }
+ 61% {
+  clip: rect(0,0,0,0);
+ }
+ 65% {
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(3) - 2%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+ @for $i from 66 through 70{
+   #{percentage($i/100)}{
+     left: random(6) - 3%;
+     top: random(3) - 2%;
+   }
+ }
+ 71% {
+  clip: rect(0,0,0,0);
+ }
+ 72% {
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(6) - 3%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+ @for $i from 73 through 79 {
+   #{percentage($i/100)}{
+     left: random(6) - 3%;
+     top: random(3) - 2%;
+   }
+ }
+ 80%{
+  clip: rect(0,0,0,0);
+ }
+ 85%{
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(6) - 3%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+  @for $i from 85 through 89{
+   #{percentage($i/100)}{
+     left: random(6) - 3%;
+     top: random(3) - 2%;
+   }
+ }
+ 90% {
+  clip: rect(0,0,0,0);
+ }
+ 95%{
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(6) - 3%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+ @for $i from 96 through 99 {
+   #{percentage($i/100)}{
+     left: random(6) - 3%;
+     top: random(3) - 2%;
+   }
+ }
+ 100%{
+  clip: rect(0,0,0,0);
+ }
+}
+@keyframes noise-anim-2{
+ 50% {
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(6) - 3%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+ @for $i from 51 through 58{
+   #{percentage($i/100)}{
+     left: random(6) - 3%;
+     top: random(3) - 2%;
+   }
+ }
+ 59% {
+  clip: rect(0,0,0,0);
+ }
+ 62% {
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(6) - 3%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+ 69% {
+  clip: rect(0,0,0,0);
+ }
+ 75% {
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(6) - 3%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+ @for $i from 75 through 80{
+   #{percentage($i/100)}{
+     left: random(6) - 3%;
+     top: random(3) - 2%;
+   }
+ }
+ 81%{
+  clip: rect(0,0,0,0);
+ }
+ 90%{
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(6) - 3%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+ @for $i from 91 through 94{
+   #{percentage($i/100)}{
+     left: random(6) - 3%;
+     top: random(3) - 2%;
+   }
+ }
+ 95% {
+  clip: rect(0,0,0,0);
+ }
+ 100%{
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(6) - 3%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+}
+@keyframes noise-anim-3{
+ 50% {
+  clip: rect(0,0,0,0);
+ }
+ 65% {
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(6) - 3%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+ @for $i from 66 through 74{
+   #{percentage($i/100)}{
+     left: random(6) - 3%;
+     top: random(3) - 2%;
+   }
+ }
+ 75% {
+  clip: rect(0,0,0,0);
+ }
+ 80% {
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(6) - 3%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+ 81% {
+  clip: rect(0,0,0,0);
+ }
+ 87% {
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(6) - 3%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+ 89%{
+  clip: rect(0,0,0,0);
+ }
+ 92%{
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(6) - 3%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+ 95% {
+  clip: rect(0,0,0,0);
+ }
+ 97%{
+     $r: random(100);
+     clip:rect( $r +vh,9999px, $r + random(15) +vh, 0);
+     left: random(6) - 3%;
+     top: random(6) - 3%;
+     filter: brightness(random(5)) saturate(random(5));
+     transform: scale(1 + random(3)/10);
+ }
+ 100%{
+  clip: rect(0,0,0,0);
+ }
+}
+@keyframes slides-1 {
+ 0% {
+  visibility: visible;
+ }
+ 33.3% {
+  visibility: hidden;
+ }
+ 100% {
+  visibility: hidden;
+ }
+}
+@keyframes slides-2 {
+ 0% {
+  visibility: hidden;
+ }
+ 33.3% {
+  visibility: visible;
+ }
+ 66.6% {
+  visibility: hidden;
+ }
+ 100% {
+  visibility: hidden;
+ }
+}
+@keyframes slides-3 {
+ 0% {
+  visibility: hidden;
+ }
+ 66.6% {
+  visibility: visible;
+ }
+ 100% {
+  visibility: hidden;
+ }
+}
+html, body {
+ height: 100%;
+ color: #fff;
+ font-family: Tahoma;
+}
+h1 {
+ font-weight: normal;
+ text-transform: uppercase;
+ text-align: center;
+ position: absolute;
+}
+.fone-slider {
+ width: 100%;
+ height: 100%;
+ position: absolute;
+ background-color: lightblue;
+ transition: opacity 1s;
+}
+
+.fone-slide {
+ visibility: hidden;
+ width: 100%;
+ height: 100%;
+ position: absolute;
+ top: 0;
+ left: 0;
+ overflow: hidden;
+ &:nth-child(1) {
+  animation: 18s slides-1 infinite step-end;
+ }
+ &:nth-child(2) {
+  animation: 18s slides-2 infinite step-end;
+ }
+ &:nth-child(3) {
+  animation: 18s slides-3 infinite step-end;
+ }
+}
+
+.fone-slide__img, .fone-slide__glitch {
+ height: 100%;
+ width: 100%;
+ position: absolute;
+ top: 0;
+ left: 0;
+ background-size: cover;
+ background-position: top center;
+}
+
+.fone-slide__glitch {
+ clip:rect( 0, 0, 0, 0);
+ opacity: .5;
+}
+
+.fone-slide__img {
+  filter: grayscale(1);
+  &--first, &--first ~ .fone-slide__glitch {
+   background-image: url(../img/loadingC.jpg);
+  }
+  &--second, &--second ~ .fone-slide__glitch {
+   background-image: url(../img/loadingC.jpg);
+  }
+  &--third, &--third ~ .fone-slide__glitch {
+   background-image: url(../img/loadingC.jpg);
+  }
+}
+
+.fone-slide__glitch:nth-child(2) {
+ animation: 6s noise-anim infinite step-end;
+}
+.fone-slide__glitch:nth-child(3) {
+ animation: 6s noise-anim-2 infinite step-end;
+}
+.fone-slide__glitch:nth-child(4) {
+ animation: 6s noise-anim-3 infinite step-end;
+}
