@@ -15,16 +15,16 @@ body canvas {
 	z-index: 15;
     width: 100%;
     height: 100%;
-    position: absolute;
+    position: fixed;
 }
 
 #loading_canvas {
 	width: 100%;
+  height: 100%;
+  object-fit: none;
+  object-position: center;
 	z-index: 15;
-	position: absolute;
-  filter: grayscale(1);
-	background-image: url(../img/loading.jpg);
-	background-size: cover;
+	position: fixed;
 	opacity: 0;
 }
 
@@ -34,10 +34,15 @@ body canvas {
 
 #big_logo {
 	position: fixed;
-	width: 100%;
-	top: -5%;
+	width: 120%;
+  left: -10%;
+	top: -15%;
   opacity: 0;
   transition: opacity 1s;
+  @media only screen and (max-width: 450px) {
+    width: 200%;
+    left: -50%;
+  }
 }
 
 #big_logo.up {
@@ -48,8 +53,10 @@ body canvas {
 #loader {
 	position: fixed;
 	background: #fff;
-	width: 100%;
-	height: 100%;
+	max-width: 100%;
+	max-height: 100%;
+  width: 100%;
+  height: 100%;
 	transition: opacity 3s ease 2s, background-color 1s;
 	z-index: 200050;
 }
@@ -57,7 +64,8 @@ body canvas {
 .screen_center {
 	position: fixed;
 	top: 45%;
-	left: 48%;
+	width: 100%;
+  text-align: center;
 	transition: opacity 1s ease 2s, color 1s;
 	opacity: 1;
 	color: #222;
@@ -71,16 +79,21 @@ body canvas {
 #click_anywhere {
   position: fixed;
   top: 83%;
-  left: 45%;
+  width: 100%;
+  text-align: center;
   opacity: 0;
   z-index: 1;
   transition: opacity 1s;
 }
 
 #main_screen {
+  background-image: url(../img/main.jpg);
+  background-position: top center;
+  background-size: cover;
 	position: absolute;
 	width: 100%;
 	height: 100%;
+  z-index: -1;
 	img {
 		position: fixed;
     transition: opacity 1s;
@@ -99,19 +112,132 @@ body canvas {
 		left: 0;
 		z-index: 0;
 	}
-	#main_text {
+	#main_text_shadow, #main_text {
 	   width: 100%;
 	   top: -7%;
+    @media only screen and (max-width: 450px) {
+      width: 250%;
+      left: -75%;
+      top: 7%;
+    }
+    @media only screen and (max-width: 600px) {
+      width: 150%;
+      left: -27%;
+      top: 5%;
+    }
+    @media only screen and (orientation: portrait) {
+      width: 170%;
+      left: -32.5%;
+      top: 20%;
+    }
 	}
   #main_text_shadow {
     z-index: 19;
     opacity: 0;
-    width: 38%;
-    top: 41%;
-    left: 31%;
   }
 	#main_logo {
+    width:20%;
+    @media only screen and (max-width: 450px) {
+      width: 50%;
+    }
 	}
+}
+
+@keyframes text-flicker {
+  0% {
+    opacity:0.1;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1);
+  }
+  
+  2% {
+    opacity:1;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1);
+  }
+  8% {
+    opacity:0.1;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1);
+  }
+  9% {
+    opacity:1;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1);
+  }
+  12% {
+    opacity:0.1;
+    text-shadow: 0px 0px rgba(242, 22, 22, 1);
+  }
+  20% {
+    opacity:1;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1)
+  }
+  25% {
+    opacity:0.3;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1)
+  }
+  30% {
+    opacity:1;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1)
+  }
+  
+  70% {
+    opacity:0.7;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1)
+  }
+  
+  72% {
+    opacity:0.2;
+    text-shadow:0px 0px 29px rgba(242, 22, 22, 1)
+  }
+  
+  77% {
+    opacity:.9;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1)
+  }
+  100% {
+    opacity:.9;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1)
+  }
+}
+
+@keyframes shadow-flicker {
+  0% {
+    opacity:0.1;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1);
+  }
+  2% {
+    opacity:0.1;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1);
+  }
+  4% {
+    opacity:1;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1);
+  }
+  
+  
+  19% {
+    opacity:1;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1);
+  }
+  21% {
+    opacity:0.1;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1);
+  }
+  23% {
+    opacity:1;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1);
+  }
+  
+  80% {
+    opacity:1;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1);
+  }
+  83% {
+    opacity:0.4;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1);
+  }
+  87% {
+    opacity:1;
+    text-shadow: 0px 0px 29px rgba(242, 22, 22, 1);
+  }
 }
 
 @keyframes tri-back {
@@ -382,7 +508,6 @@ body canvas {
  }
 }
 html, body {
- height: 100%;
  color: #fff;
  font-family: Tahoma;
 }

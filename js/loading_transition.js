@@ -5,7 +5,11 @@ var image,
     imageWidth,
     imageHeight, 
     pic_real_width,
-    pic_real_height;
+    pic_real_height,
+    cropx = 0,
+    piece_dense = 200, 
+    clientWidth, 
+    clientHeight;
 
 var vertices = [],
     indices = [],
@@ -25,7 +29,7 @@ function effect_go() {
     clickPosition[0] = imageWidth * 0.5 - left;
     clickPosition[1] = imageHeight * 0.5 - top;
 
-    console.log(triangulate(100));
+    console.log(triangulate(80));
     shatter();
 }
 
@@ -37,14 +41,14 @@ function triangulate(dense) {
     vertices.push([centerX, centerY]);
 
     for (var i = 0; i < dense; i ++) {
-        x = (Math.random()) * imageWidth * 1.5 - imageWidth * 0.1;
-        y = (Math.random()) * imageHeight * 1.5 - imageHeight * 0.1;
+        x = (Math.random()) * clientWidth * 1.5 - clientWidth * 0.1;
+        y = (Math.random()) * clientHeight * 1.5 - clientHeight * 0.1;
         vertices.push([x, y]); 
     }
 
     vertices.forEach(function(v) {
-        v[0] = clamp(v[0], 0, imageWidth * 1.5);
-        v[1] = clamp(v[1], 0, imageHeight);
+        v[0] = clamp(v[0], 0, clientWidth * 1.5);
+        v[1] = clamp(v[1], 0, clientHeight);
     });
 
     indices = Delaunay.triangulate(vertices);
@@ -172,6 +176,6 @@ Fragment.prototype = {
         this.ctx.lineTo(this.v2[0], this.v2[1]);
         this.ctx.closePath();
         this.ctx.clip();
-        this.ctx.drawImage(image, 0, 0, pic_real_width, pic_real_height, 0, 0, imageWidth, imageHeight);
+        this.ctx.drawImage(image, 0, 0, pic_real_width, pic_real_height, cropx, 0, imageWidth, imageHeight);
     }
 };

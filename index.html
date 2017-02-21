@@ -8,17 +8,18 @@
 	<script language = "javascript" src = "./js/delaunay.js"> </script>
 	<script language = "javascript" src = "./js/TweenMax.min.js"> </script>
 	<script language = "javascript" src = "./js/loading_transition.js"> </script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="./css/main.css">
 </head>
 
 <body>
 	<div id="loader">
-		<label id="loading_text" class="screen_center" > 0%</label>
+		<label id="loading_text" class="screen_center" > 0%</label>	
 		<label id="loading_percent" class="screen_center" > </label>
 	</div>
 	<div id="loading_screen">
 		<img class = "logo" id="big_logo" src = "./img/Loading Page - Wasted Talent.gif" />
-		<label id = "click_anywhere" > Click anywhere</label>
+		<label id = "click_anywhere" > click anywhere</label> 
 		<div id="loading_back_wrap">
 			<img id = "loading_canvas" width="100%" src = "./img/loading.jpg" > </img>
 		</div>
@@ -47,8 +48,10 @@
 
 	<div id="main_screen">
 		<img id="main_logo" src="./img/main-logo.png" />
-		<img id="main_text" src="./img/Main Page - Saddest Thing in Life.gif" />
-		<img id="main_text_shadow" src="./img/main-text-shadow.png" />
+		<div id="main_text_wrap">
+			<img id="main_text" src="./img/Main Page - Saddest Thing in Life.gif" />
+			<img id="main_text_shadow" src="./img/main-text-shadow.png" />
+		<div>
 		<img id="main_image" src="./img/main.jpg" width="100%"/>
 	</div>
 
@@ -83,9 +86,39 @@ $(document).ready(function() {
 
 
 
+	function calc_tri_dimension(src, cont) {
+		var ct, sc;
+		image = document.getElementById(src);
+		container = document.getElementById(cont); 
+
+		imageWidth = container.clientWidth;
+		imageHeight = container.clientHeight;
+		clientWidth = container.clientWidth;
+		clientHeight = container.clientHeight;
+		clickPosition = [imageWidth * 0.5, imageHeight * 0.5]; 
+
+		console.log(imageHeight + ", " + imageWidth);
+
+		piece_dense = imageWidth / 100 * imageHeight / 100;
+		pic_real_width = image.naturalWidth;
+		pic_real_height = image.naturalHeight;
+		if(clientWidth / clientHeight < pic_real_width / pic_real_height) {
+			if(imageWidth < pic_real_width) {
+				imageWidth = (pic_real_width / pic_real_height) * imageHeight;
+				cropx = (container.clientWidth - imageWidth) / 2;
+			}
+			imageHeight = (pic_real_height / pic_real_width) * imageWidth;
+		} else {
+			if(imageHeight < pic_real_height) {
+				imageHeight = (pic_real_height / pic_real_width) * imageWidth;
+				cropx = 0;
+			}
+			imageWidth = (pic_real_width / pic_real_height) * imageHeight;
+		}
+	}
+
 	setTimeout(function() {
 		load = setInterval(loading, 200);
-		build_pieces(); 
 	}, 400); 
 
 
@@ -101,6 +134,7 @@ $(document).ready(function() {
 			loader.style.opacity = 0;
 			setTimeout(function() {
 				$("#loader").remove();
+				build_pieces(); 
 				load_complete();
 			}, 4000);
 			return;
@@ -119,7 +153,7 @@ $(document).ready(function() {
 	}
 
 	$("#big_logo").click(function() {
-		loading_canvas.className = "active";
+		// loading_canvas.className = "active";
 		setTimeout(function() {
 			to_mainscreen(); 
 			$("#background").css('opacity', '0');
@@ -128,12 +162,7 @@ $(document).ready(function() {
 
 	function to_mainscreen() {
 		init_mainscreen(); 
-		container = document.getElementById("loading_back_wrap"); 
-		image = document.getElementById("loading_canvas");
-		imageWidth = image.width;
-		imageHeight = image.height;
-		pic_real_width = image.naturalWidth;
-		pic_real_height = image.naturalHeight;
+		calc_tri_dimension("loading_canvas", "loading_back_wrap");
 		effect_go(); 
 		document.getElementById("big_logo").style.opacity = 0;
 		setTimeout(function() {
@@ -145,6 +174,8 @@ $(document).ready(function() {
 			$("#main_screen canvas").css('opacity', '1');
 			setTimeout(function() {
 				setInterval(process, 50);
+				document.getElementById("main_text").style.animation= "text-flicker 3s linear infinite";
+				document.getElementById("main_text_shadow").style.animation = "shadow-flicker 2s linear infinite";
 			}, 3000);
 		}, 5000);
 	}
@@ -158,20 +189,15 @@ $(document).ready(function() {
 
 	function build_pieces() {
 
-		image = document.getElementById("main_image");
-		imageWidth = image.width;
-		imageHeight = image.height;
-		pic_real_width = image.naturalWidth;
-		pic_real_height = image.naturalHeight;
+		calc_tri_dimension("main_image", "main_screen");
 
-		for(var i = 0; i <= affect_r; i += 10) {
+		for(var i = 0; i <= affect_r; i += 5) {
 			coss[i] = [];
 			for(var j = 0; j < i; j ++) {
 				coss[i].push(Math.cos(j / i * Math.PI * 0.75 - Math.PI * 0.25));
 			}
 			coss[i].push(0);
 		}
-		image = document.getElementById("main_image"); 
 		for(var l = 0; l < 5; l ++) {
 		    vertices = [];
 			l_indices = triangulate(200);
@@ -202,7 +228,7 @@ $(document).ready(function() {
 
 	function init_mainscreen() {
 		document.getElementById("main_image").style.display = "block";
-		document.getElementById("main_image").style.opacity = 1;
+		// document.getElementById("main_image").style.opacity = 1;
 	}
 
 	document.getElementById("main_screen").onmousemove = function(event) {
@@ -226,10 +252,10 @@ $(document).ready(function() {
 		pdy = Math.abs(new_e.clientY - prev_e.clientY); 
 		pdr = pdx + pdy;
 		if(pdr == 0 || isNaN(pdr)) {
-			inertia -= 10;
+			inertia -= 15;
 			if(inertia < 0) inertia = 0;
 		} else {
-			inertia += 10;
+			inertia += 15;
 			if(inertia > affect_r) inertia = affect_r;
 		}
 
