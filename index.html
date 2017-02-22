@@ -132,6 +132,7 @@ $(document).ready(function() {
 			loading_text.style.color="#fff";
 			loader.style.backgroundColor="#333";
 			loader.style.opacity = 0;
+			load_percent = 99;
 			setTimeout(function() {
 				$("#loader").remove();
 				build_pieces(); 
@@ -145,15 +146,17 @@ $(document).ready(function() {
 	}
 
 	function load_complete() {
-		document.getElementById("big_logo").className = "up";
 		document.getElementById("big_logo").src = document.getElementById("big_logo").src;
+		document.getElementById("big_logo").className = "up";
 		setTimeout(function() {
 			document.getElementById("click_anywhere").style.opacity = 1;
+			load_percent = 101;
 		}, 7000);
 	}
 
-	$("#big_logo").click(function() {
+	$("body").click(function() {
 		// loading_canvas.className = "active";
+		if(load_percent < 100) return ;
 		setTimeout(function() {
 			to_mainscreen(); 
 			$("#background").css('opacity', '0');
@@ -170,10 +173,10 @@ $(document).ready(function() {
 			document.getElementById("main_text").className = "up"; 
 			document.getElementById("main_text").src = document.getElementById("main_text").src;
 			document.getElementById("main_logo").className = "up"; 
-			document.getElementById("main_text_shadow").className = "up"; 
 			$("#main_screen canvas").css('opacity', '1');
 			setTimeout(function() {
 				setInterval(process, 50);
+				document.getElementById("main_text_shadow").className = "up"; 
 				document.getElementById("main_text").style.animation= "text-flicker 3s linear infinite";
 				document.getElementById("main_text_shadow").style.animation = "shadow-flicker 2s linear infinite";
 			}, 3000);
@@ -218,6 +221,7 @@ $(document).ready(function() {
 			    	continue;
 		        fragment.canvas.style.transition = "transform 0.3s";
 		        fragment.canvas.style.opacity = 0;
+		        fragment.canvas.style.position = "fixed";
 		        l_frags[l].push(fragment); 
 		        main_screen.appendChild(fragment.canvas);
 			}

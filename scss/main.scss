@@ -42,6 +42,17 @@ body canvas {
   @media only screen and (max-width: 450px) {
     width: 200%;
     left: -50%;
+    top: 10%;
+  }
+  @media only screen and (max-width: 800px) {
+    width: 150%;
+    left: -25%;
+    top: 5%;
+  }
+  @media only screen and (orientation: landscape) {
+    width: 120%;
+    left: -10%;
+    top: -15%;
   }
 }
 
@@ -128,7 +139,7 @@ body canvas {
     @media only screen and (orientation: portrait) {
       width: 170%;
       left: -32.5%;
-      top: 20%;
+      top: 15%;
     }
 	}
   #main_text_shadow {
@@ -136,9 +147,12 @@ body canvas {
     opacity: 0;
   }
 	#main_logo {
-    width:20%;
+    width: auto;
     @media only screen and (max-width: 450px) {
       width: 50%;
+    }
+    @media only screen and (max-width: 1000px) {
+      width: 20%;
     }
 	}
 }

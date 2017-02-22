@@ -26,8 +26,8 @@ function effect_go() {
         top = box.top,
         left = box.left;
 
-    clickPosition[0] = imageWidth * 0.5 - left;
-    clickPosition[1] = imageHeight * 0.5 - top;
+    clickPosition[0] = clientWidth * 0.5;
+    clickPosition[1] = clientHeight * 0.5;
 
     console.log(triangulate(80));
     shatter();
