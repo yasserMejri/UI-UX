@@ -16,7 +16,7 @@
 	<div id="loader">
 		<label id="loading_text" class="screen_center" > 0%</label>	
 		<label id="loading_percent" class="screen_center" > </label>
-	</div>
+  	</div>
 	<div id="loading_screen">
 		<img class = "logo" id="big_logo" src = "./img/Loading Page - Wasted Talent.gif" />
 		<label id = "click_anywhere" > click anywhere</label> 
@@ -48,6 +48,7 @@
 
 	<div id="main_screen">
 		<img id="main_logo" src="./img/main-logo.png" />
+		<label id="contact"> [ <a target="_blank" href ="mailto:stephen@wastedtalent.tech" >Contact</a> ]  </label>
 		<div id="main_text_wrap">
 			<img id="main_text" src="./img/Main Page - Saddest Thing in Life.gif" />
 			<img id="main_text_shadow" src="./img/main-text-shadow.png" />
@@ -97,24 +98,34 @@ $(document).ready(function() {
 		clientHeight = container.clientHeight;
 		clickPosition = [imageWidth * 0.5, imageHeight * 0.5]; 
 
-		console.log(imageHeight + ", " + imageWidth);
+		console.log(imageWidth + ", " + imageHeight);
 
 		piece_dense = imageWidth / 100 * imageHeight / 100;
 		pic_real_width = image.naturalWidth;
 		pic_real_height = image.naturalHeight;
+		console.log(pic_real_width + ", " + pic_real_height);
 		if(clientWidth / clientHeight < pic_real_width / pic_real_height) {
 			if(imageWidth < pic_real_width) {
 				imageWidth = (pic_real_width / pic_real_height) * imageHeight;
 				cropx = (container.clientWidth - imageWidth) / 2;
+				imageHeight = (pic_real_height / pic_real_width) * imageWidth;
+				console.log("1"); 
+			} else {
+				imageWidth = (pic_real_width / pic_real_height) * imageHeight;
+				console.log("10"); 
 			}
-			imageHeight = (pic_real_height / pic_real_width) * imageWidth;
 		} else {
 			if(imageHeight < pic_real_height) {
 				imageHeight = (pic_real_height / pic_real_width) * imageWidth;
 				cropx = 0;
+				imageWidth = (pic_real_width / pic_real_height) * imageHeight;
+				console.log("2"); 
+			} else {
+				imageHeight = (pic_real_height / pic_real_width) * imageWidth;
+				console.log("20"); 
 			}
-			imageWidth = (pic_real_width / pic_real_height) * imageHeight;
 		}
+		console.log(imageWidth + ", " + imageHeight); 
 	}
 
 	setTimeout(function() {
@@ -168,14 +179,15 @@ $(document).ready(function() {
 		calc_tri_dimension("loading_canvas", "loading_back_wrap");
 		effect_go(); 
 		document.getElementById("big_logo").style.opacity = 0;
+		document.getElementById("click_anywhere").style.opacity = 0;
 		setTimeout(function() {
 			$("#loading_screen").remove();
 			document.getElementById("main_text").className = "up"; 
 			document.getElementById("main_text").src = document.getElementById("main_text").src;
 			document.getElementById("main_logo").className = "up"; 
 			$("#main_screen canvas").css('opacity', '1');
+			setInterval(process, 50);
 			setTimeout(function() {
-				setInterval(process, 50);
 				document.getElementById("main_text_shadow").className = "up"; 
 				document.getElementById("main_text").style.animation= "text-flicker 3s linear infinite";
 				document.getElementById("main_text_shadow").style.animation = "shadow-flicker 2s linear infinite";
@@ -239,6 +251,11 @@ $(document).ready(function() {
 		update_pos(event);
 	}; 
 
+	document.getElementById("main_screen").touchmove = function(event) {
+		preventDefault(); 
+		update_pos(event);
+	}; 
+
 	function update_pos(e) {
 		new_e = e;
 		clearInterval(pstp);
@@ -286,6 +303,110 @@ $(document).ready(function() {
 			}
 		}
 	} 
+
+	'use strict';
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	// ——————————————————————————————————————————————————
+	// TextScramble
+	// Scrambler by Hao on Codepen ——————————————————————————————————————————————————
+
+	var TextScramble = function () {
+	  function TextScramble(el) {
+	    _classCallCheck(this, TextScramble);
+
+	    this.el = el;
+	    this.chars = '!@<>-#_\\/[]{}—=+*^?#________';
+	    this.update = this.update.bind(this);
+	  }
+
+	  TextScramble.prototype.setText = function setText(newText) {
+	    var _this = this;
+
+	    var oldText = this.el.innerText;
+	    var length = Math.max(oldText.length, newText.length);
+	    var promise = new Promise(function (resolve) {
+	      return _this.resolve = resolve;
+	    });
+	    this.queue = [];
+	    for (var i = 0; i < length; i++) {
+	      var from = oldText[i] || '';
+	      var to = newText[i] || '';
+	      var start = Math.floor(Math.random() * 40);
+	      var end = start + Math.floor(Math.random() * 40);
+	      this.queue.push({
+	        from: from,
+	        to: to,
+	        start: start,
+	        end: end
+	      });
+	    }
+	    cancelAnimationFrame(this.frameRequest);
+	    this.frame = 0;
+	    this.update();
+	    return promise;
+	  };
+
+	  TextScramble.prototype.update = function update() {
+	    var output = '';
+	    var complete = 0;
+	    for (var i = 0, n = this.queue.length; i < n; i++) {
+	      var _queue$i = this.queue[i];
+	      var from = _queue$i.from;
+	      var to = _queue$i.to;
+	      var start = _queue$i.start;
+	      var end = _queue$i.end;
+	      var char = _queue$i.char;
+
+	      if (this.frame >= end) {
+	        complete++;
+	        output += to;
+	      } else if (this.frame >= start) {
+	        if (!char || Math.random() < 0.28) {
+	          char = this.randomChar();
+	          this.queue[i].char = char;
+	        }
+	        output += '<span class="dud">' + char + '</span>';
+	      } else {
+	        output += from;
+	      }
+	    }
+	    this.el.innerHTML = output;
+	    if (complete === this.queue.length) {
+	      this.resolve();
+	    } else {
+	      this.frameRequest = requestAnimationFrame(this.update);
+	      this.frame++;
+	    }
+	  };
+
+	  TextScramble.prototype.randomChar = function randomChar() {
+	    return this.chars[Math.floor(Math.random() * this.chars.length)];
+	  };
+
+	  return TextScramble;
+	}();
+
+	// ——————————————————————————————————————————————————
+	// Example
+	// ——————————————————————————————————————————————————
+
+	var phrases = ['CONTACT', 'CONTACT', 'CONTACT', 'CONTACTil'];
+
+	var el = $("#contact a")[0];
+	var fx = new TextScramble(el);
+
+	var counter = 0;
+	var next = function next() {
+	  fx.setText(phrases[counter]).then(function () {
+	    setTimeout(next, 1200);
+	  });
+	  counter = (counter + 1) % phrases.length;
+	};
+
+	next();
+	//# sourceURL=pen.js
 
 }); 
 
